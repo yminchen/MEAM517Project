@@ -1,4 +1,4 @@
-function [position, isterminal, direction] = groundEvent(t,x,phase,t_prev_stance,k_des,dx_des)
+function [position, isterminal, direction] = singleStanceEvent(t,x,phase,t_prev_stance,k_des,dx_des)
     param = yumingParameters();
     sysParam = param.sysParam;
     

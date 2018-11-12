@@ -13,16 +13,16 @@ F_SAVEVID = 0;          % Save generated animation
 relTol  = 1e-6;         % Relative tolerance: Relative tolerance for ode45 numerical integration
 absTol  = 1e-6;         % Absolute tolerance: Absolute tolerance for ode45 numerical integration 
 dt      = 0.01; %[s]    % Max time step: Maximum time step for numerica integration 
-tFinal  = 11;    %[s]    % Simulation end time
+tFinal  = 5;    %[s]    % Simulation end time
 
 %% Simulation parameters
 x0 = 0;          %[m]    % initial X position 
 y0 = 0.6;        %[m]    % initial Y position
 body_rot = 0;
 phi0 = body_rot;          %[rad]  % initial angle between vertical and hip
-alphaR0 = 0+body_rot;     %[rad]  % iniial angle between hip and thigh
+alphaR0 = -0.5+body_rot;     %[rad]  % iniial angle between hip and thigh
 betaR0 = 0+body_rot;      %[rad]  % initial angle between thigh and shank
-alphaL0 = 0+body_rot;     %[rad]  % iniial angle between hip and thigh
+alphaL0 = 0.5+body_rot;     %[rad]  % iniial angle between hip and thigh
 betaL0 = 0+body_rot;      %[rad]  % initial angle between thigh and shank
 vx0 = 0;         %[m/s]  % initial X velociy 
 vy0 = 0;         %[m/s]  % initial Y velociy
@@ -72,7 +72,7 @@ while T(end) < tFinal
 %         disp(size(Ie));
         if(isempty(Ie)== 1) % Simulation timed out
             disp('Time out');
-        elseif(Ie == 1) % Touchdown event
+        elseif(Ie(1) == 1) % Touchdown event
             if DS(end) == 1
                 disp('Right Foot Touchdown');
                 DS(end) = 2;
@@ -80,7 +80,7 @@ while T(end) < tFinal
                 disp('left Foot Touchdown');
                 DS(end) = 5;
             end
-            qplus = impactVelUpdate(Sp(end,:)',DS(end));
+            qplus = singleStanceImpactUpdate(Sp(end,:)',DS(end));
             Sp(end,:) = [Sp(end,1:7)'; qplus];
             % Yu-Ming's parameter
             prev_t = Tp(end);
@@ -101,7 +101,7 @@ while T(end) < tFinal
             elseif DS(end) == 5
                 dL = abs(dSpringLengthL(Sp(end,:)',sysParam)); 
             end
-        elseif(Ie == 2 || Ie == 3 || Ie == 4 || Ie == 5 || Ie == 6)
+        elseif(Ie(1) == 2 || Ie(1) == 3 || Ie(1) == 4 || Ie(1) == 5 || Ie(1) == 6)
             S = [S;Sp(2:sz,:)];
             T = [T;Tp(2:sz,:)];
             disp('Contact point is not front foot');
@@ -111,8 +111,8 @@ while T(end) < tFinal
         end
     elseif (DS(end)~=1) && (DS(end)~=4)
         gndSimOpts = odeset('RelTol',relTol,'AbsTol',absTol,...
-            'Events',@(t,x) groundEvent(t,x,DS(end),t_prev_stance,k_des,dx_des),'MaxStep',dt);
-        [Tp,Sp,TEp,SEp,Ie] = ode45(@(t,x) groundDyn(t,x,DS(end),...
+            'Events',@(t,x) singleStanceEvent(t,x,DS(end),t_prev_stance,k_des,dx_des),'MaxStep',dt);
+        [Tp,Sp,TEp,SEp,Ie] = ode45(@(t,x) singleStanceDyn(t,x,DS(end),...
             t_prev_stance,k_des,dx_des),[tspan, tspan(end)+dt],S(end,:),gndSimOpts);
         sz = size(Sp,1);
         DS = [DS;DS(end)*ones(sz-1,1)];
@@ -197,7 +197,7 @@ plot_flag_index = [17 18];    % look at energy
 % plot_flag_index = [15 16];    % look at spring length and speed
 plot_flag_index = [8];        % x velocity
 % plot_flag_index = [1 8];      % x
-% plot_flag_index = [21 22];    % gound reaction force
+plot_flag_index = [21 22];    % gound reaction force
 % plot_flag_index = [25 26];    % Foot position
 % plot_flag_index = [2];        % y
 

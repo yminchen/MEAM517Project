@@ -1,4 +1,4 @@
-function qplus = impactVelUpdate(x,phase)
+function qplus = singleStanceImpactUpdate(x,phase)
     param = yumingParameters();
     sysParam = param.sysParam;
     
