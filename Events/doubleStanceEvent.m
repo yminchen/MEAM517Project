@@ -1,35 +1,26 @@
-function [position, isterminal, direction] = singleStanceEvent(t,x,phase,k_des,dx_des)
+function [position, isterminal, direction] = doubleStanceEvent(t,x,phase,k_des,dx_des)
     param = yumingParameters();
     sysParam = param.sysParam;
     
     n = size(x,1);
     
-    %% detect take-off
+    %% detect lift off
     tau = groundController(x,phase,k_des,dx_des);
     
     % Calculate Ground Reaction Force
     M = MassMatrix(x(1:n/2),sysParam);
     fCG = FCorGrav(x,sysParam);
-    if phase==2 || phase==3
-        J = JcontPointR(x(1:n/2),sysParam);
-        dJ = dJcontPointR(x,sysParam);
-    elseif phase==5 || phase==6
-        J = JcontPointL(x(1:n/2),sysParam);
-        dJ = dJcontPointL(x,sysParam);
-    end
+    J = [JcontPointR(x(1:n/2),sysParam);
+         JcontPointL(x(1:n/2),sysParam)];
+    dJ = [dJcontPointR(x,sysParam);
+          dJcontPointL(x,sysParam)];
     lamda = -(J*(M\J'))\(J*(M\(fCG+tau)) + dJ*x(n/2+1:n));
         
     position(1)     = lamda(2);
     isterminal(1)   = 1;
     direction(1)    = -1;
     
-    %% detect swing leg touchdown event
-    if phase==2 || phase==3
-        SwingFoot = posFootL(x,sysParam); 
-    elseif phase==5 || phase==6
-        SwingFoot = posFootR(x,sysParam); 
-    end
-    position(2)     = SwingFoot(2);
+    position(2)     = lamda(4);
     isterminal(2)   = 1;
     direction(2)    = -1;
     

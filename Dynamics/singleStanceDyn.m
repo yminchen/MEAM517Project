@@ -1,4 +1,4 @@
-function dxdt = singleStanceDyn(t,x,phase,t_prev_stance,k_des,dx_des)
+function dxdt = singleStanceDyn(t,x,phase,k_des,dx_des)
     param = yumingParameters();
     sysParam = param.sysParam;
     
@@ -7,7 +7,7 @@ function dxdt = singleStanceDyn(t,x,phase,t_prev_stance,k_des,dx_des)
     dxdt(1:n/2) = x(n/2+1:n);
     
     % controller
-%     tau = groundController(x,phase,t_prev_stance,k_des,dx_des);
+%     tau = groundController(x,phase,k_des,dx_des);
     tau = zeros(n/2,1);
     
     % Calculate Ground Reaction Force

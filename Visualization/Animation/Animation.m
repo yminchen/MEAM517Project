@@ -33,7 +33,7 @@ axis equal;
 boarderR = max(X(:,1))+1;
 boarderL = min(X(:,1))-2;
 boarderT = max(X(:,2))+0.5;
-axis([boarderL boarderR -0.1 boarderT])
+axis([boarderL boarderR -0.8 boarderT])
 % axis([boarderL 2 -0.1 2])
 
 % Plot ground
@@ -122,13 +122,7 @@ a5 = plot([posFR(1) posKR(1)],[posFR(2) posKR(2)],'b','LineWidth',LinkWidth);
 % Display time on plot
 a10 = text(0.95*boarderL,0.1*boarderT,['' ...
     num2str(T(1),'%1.1f') ' sec'],'color','k');
-
-% Display states on plot
-a11 = text(0.95*boarderL,0.9*boarderT,'\fontsize{10}\fontname{Arial Black}Flight','color',[0.8,0.8,0.8]);
-a12 = text(0.95*boarderL,0.8*boarderT,'\fontsize{10}\fontname{Arial Black}Compression','color',[0.8,0.8,0.8]);
-a13 = text(0.95*boarderL,0.7*boarderT,'\fontsize{10}\fontname{Arial Black}Thrust','color',[0.8,0.8,0.8]);
-a14 = text(0.85*boarderL,0.6*boarderT,'\fontsize{10}\fontname{Arial Black}R','color',[0.8,0.8,0.8]);
-a15 = text(0.95*boarderL,0.6*boarderT,'\fontsize{10}\fontname{Arial Black}L','color',[0.8,0.8,0.8]);       
+      
 % end of skeleton plot =======================
 
 % This for loop would show animation as well as store the animation in F().
@@ -169,36 +163,6 @@ for ti=1:length(T)
     
     % Display time on plot
     set(a10,'String',[num2str(T(ti),'%1.1f') ' sec']);
-    
-    % Display states on plot
-    sc = S(ti);     % current state
-    if sc <= 3
-        if sc == 1 
-            set(a13,'Color',[0.8,0.8,0.8]);
-            set(a11,'Color',[0,0,1]);
-        elseif sc == 2 
-            set(a11,'Color',[0.8,0.8,0.8]);
-            set(a12,'Color',[0,0,1]);
-        elseif sc == 3 
-            set(a12,'Color',[0.8,0.8,0.8]);
-            set(a13,'Color',[0,0,1]);
-        end
-        set(a15,'Color',[0.8,0.8,0.8]);
-        set(a14,'Color',[0,0,1]);
-    else 
-        if  sc == 4 
-            set(a13,'Color',[0.8,0.8,0.8]);
-            set(a11,'Color',[1,0,0]);
-        elseif sc == 5
-            set(a11,'Color',[0.8,0.8,0.8]);
-            set(a12,'Color',[1,0,0]);
-        elseif sc == 6
-            set(a12,'Color',[0.8,0.8,0.8]);
-            set(a13,'Color',[1,0,0]);
-        end
-        set(a14,'Color',[0.8,0.8,0.8]);
-        set(a15,'Color',[1,0,0]);
-    end
     
     % Save frames for animaiton
     F(ti) = getframe(h,[0 0 1000 400]); 

@@ -34,21 +34,6 @@ for i = 1:n
     end
 end
 
-% get t_prev_stance
-t_prev_stance = zeros(n,1);
-for i = 1:n
-    for j = 2:size(t_prev_stance_forPlot,1)+1
-        if j == size(t_prev_stance_forPlot,1)+1
-            t_prev_stance(i) = t_prev_stance_forPlot(j-1,1);
-            break;
-        end
-        if T(i)<t_prev_stance_forPlot(j,2)
-            t_prev_stance(i) = t_prev_stance_forPlot(j-1,1);
-            break;
-        end
-    end
-end
-
 % get k_des
 k_des = zeros(n,1);
 for i = 1:n
@@ -111,7 +96,7 @@ if plot_flag(19)||plot_flag(20)||plot_flag(27)||plot_flag(28)
             tau_R(i,:) = tau_temp(4:5,1)';
             tau_L(i,:) = tau_temp(6:7,1)';
         else
-            tau_temp = groundController(S(i,:)',DS(i),t_prev_stance(i),k_des(i),dx_des(i));
+            tau_temp = groundController(S(i,:)',DS(i),k_des(i),dx_des(i));
             tau_R(i,:) = tau_temp(4:5,1)';
             tau_L(i,:) = tau_temp(6:7,1)';
         end
@@ -123,7 +108,7 @@ F_c = zeros(n,2);
 if plot_flag(21)||plot_flag(22)
     for i = 1:n
         if DS(i)~=1 && DS(i)~=4
-            tau_temp = groundController(S(i,:)',DS(i),t_prev_stance(i),k_des(i),dx_des(i));
+            tau_temp = groundController(S(i,:)',DS(i),k_des(i),dx_des(i));
 
             M = MassMatrix(S(i,1:7)',sysParam);
             if DS(i)==2 || DS(i)==3
@@ -186,9 +171,6 @@ axis([T(1) T(end) min_height max_height]);
 % plot states
 plotStates;    
 legend('show');
-
-% plot phase zone
-plotPhaseZone;
 
 % plot states 
 plotStates;    
