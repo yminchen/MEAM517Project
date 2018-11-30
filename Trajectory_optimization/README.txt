@@ -1,1 +1,2 @@
-The code for trajectory optimization is one level outside this repository.
+The code for generating trajectories is one level outside the MEAM517Project repository.
+We only store the nominal trajecotries here. 
