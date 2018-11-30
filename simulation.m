@@ -188,6 +188,7 @@ while T(end) < tFinal
     
 end
 
+
 %% Plot 
 
 % Ref: P = [S, L_R, dL_R, E, E_des, tau_R, F_c,  Theta_R, dTheta_R, FootPos_R, tau_L]
@@ -215,7 +216,7 @@ if F_PLOT
 end
 
 %% Animation
-videoFileName = 'Video.avi';
+videoFileName = 'CLF-QP.avi';
 if F_ANIMATE
-    Animation(T,S,DS,T(end),F_SAVEVID,videoFileName);    
+    Animation(T,S,T(end),F_SAVEVID,videoFileName);    
 end

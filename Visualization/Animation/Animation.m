@@ -1,4 +1,4 @@
-function Animation(T,X,S,tFinal,F_SAVEVID,videoFileName)
+function Animation(T,X,tFinal,F_SAVEVID,videoFileName)
 
 % settings
 slowmotionMultiplier = 1;
@@ -56,7 +56,7 @@ scatter(target_pos,Terrain(target_pos,ter_i),50,'MarkerEdgeColor','b',...
 % Time text
 text(0.95*boarderL,0.2*boarderT,'elapsed time:','color','k');
 % Animation title and label
-title('Two-leg Hopper Animation (2D)')
+title('CLF-QP')
 xlabel(' (m)')
 ylabel(' (m)')
 % Skeleton plot =============================
