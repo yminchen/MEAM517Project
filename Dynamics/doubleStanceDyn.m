@@ -7,8 +7,8 @@ function dxdt = doubleStanceDyn(t,x,phase,k_des,dx_des)
     dxdt(1:n/2) = x(n/2+1:n);
     
     % controller
-%     tau = groundController(x,phase);
-    tau = zeros(n/2,1);
+    tau = groundController(x,phase);
+%     tau = zeros(n/2,1);
     
     % Calculate Ground Reaction Force
     M = MassMatrix(x(1:n/2),sysParam);

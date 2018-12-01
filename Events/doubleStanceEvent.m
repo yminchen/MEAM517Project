@@ -5,7 +5,7 @@ function [position, isterminal, direction] = doubleStanceEvent(t,x,phase,k_des,d
     n = size(x,1);
     
     %% detect lift off
-    tau = groundController(x,phase,k_des,dx_des);
+    tau = groundController(x,phase);
     
     % Calculate Ground Reaction Force
     M = MassMatrix(x(1:n/2),sysParam);

@@ -13,24 +13,10 @@ F_SAVEVID = 0;          % Save generated animation
 relTol  = 1e-10;         % Relative tolerance: Relative tolerance for ode45 numerical integration
 absTol  = 1e-10;         % Absolute tolerance: Absolute tolerance for ode45 numerical integration 
 dt      = 0.01; %[s]    % Max time step: Maximum time step for numerica integration 
-tFinal  = 5;    %[s]    % Simulation end time
+tFinal  = 1;    %[s]    % Simulation end time
 
-%% Simulation parameters
-x0 = 0;          %[m]    % initial X position 
-y0 = 0.6;        %[m]    % initial Y position
-body_rot = 0;
-phi0 = body_rot;          %[rad]  % initial angle between vertical and hip
-alphaR0 = -0.5+body_rot;     %[rad]  % iniial angle between hip and thigh
-betaR0 = 0+body_rot;      %[rad]  % initial angle between thigh and shank
-alphaL0 = 0.6+body_rot;     %[rad]  % iniial angle between hip and thigh
-betaL0 = 0+body_rot;      %[rad]  % initial angle between thigh and shank
-vx0 = 0;         %[m/s]  % initial X velociy 
-vy0 = 0;         %[m/s]  % initial Y velociy
-vphi0 = 0;       %[rad/s]% initial phi angular velocity
-valphaR0 = 0;    %[rad/s]% initial alpha angular  velocity
-vbetaR0 = 0;     %[rad/s]% initial beta angular  velocity
-valphaL0 = 0;    %[rad/s]% initial alpha angular  velocity
-vbetaL0 = 0;     %[rad/s]% initial beta angular  velocity
+%% Initial condition
+sim_init_condition;
 
 %% Yu-ming's parameters
 param = yumingParameters();
@@ -55,7 +41,7 @@ T(1) = 0;
 S(1,:) = [x0;y0;phi0;alphaR0;betaR0;alphaL0;betaL0;...
           vx0;vy0;vphi0;valphaR0;vbetaR0;valphaL0;vbetaL0];
 
-DS(1) = 1;  % right leg: flight compression thrust 1 2 3
+DS(1) = 2;  % right leg: flight compression thrust 1 2 3
             % left  leg: flight compression thrust 4 5 6
             % right leg double stance: 7
             % left leg double stance: 8
