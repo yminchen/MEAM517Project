@@ -22,7 +22,7 @@ body_rot = 0;
 phi0 = body_rot;          %[rad]  % initial angle between vertical and hip
 alphaR0 = -0.5+body_rot;     %[rad]  % iniial angle between hip and thigh
 betaR0 = 0+body_rot;      %[rad]  % initial angle between thigh and shank
-alphaL0 = 0.5+body_rot;     %[rad]  % iniial angle between hip and thigh
+alphaL0 = 0.6+body_rot;     %[rad]  % iniial angle between hip and thigh
 betaL0 = 0+body_rot;      %[rad]  % initial angle between thigh and shank
 vx0 = 0;         %[m/s]  % initial X velociy 
 vy0 = 0;         %[m/s]  % initial Y velociy
@@ -34,7 +34,6 @@ vbetaL0 = 0;     %[rad/s]% initial beta angular  velocity
 
 %% Yu-ming's parameters
 param = yumingParameters();
-t_prev_stance = param.t_prev_stance;   %[s]
 prev_t = 0;
 dx_des = 0;         % desired speed (initialized to be 0)
 dx_des_forPlot = [dx_des 0];
@@ -48,7 +47,7 @@ x_td = 0;           % state vector at previous touchdown
 contactR = 0;       % true if right foot is touching the ground
 contactL = 0;       % true if left foot is touching the ground
 
-%% Simulation 
+%% Simulation (the simulation is not prefect at multiple contacts)
 %Setting up simulation
 sysParam = param.sysParam;
 
@@ -61,8 +60,9 @@ DS(1) = 1;  % right leg: flight compression thrust 1 2 3
             % right leg double stance: 7
             % left leg double stance: 8
 while T(end) < tFinal
-       
     tspan = T(end):dt:tFinal;
+    
+    % Flight phase
     if(DS(end) == 1) || (DS(end) == 4)
         fltSimOpts = odeset('RelTol',relTol,'AbsTol',absTol,...
             'Events',@(t,x) flightEvent(t,x,DS(end)),'MaxStep',dt);    
@@ -101,6 +101,8 @@ while T(end) < tFinal
         else 
             disp('Flight Phase: Invalid event code');
         end
+        
+    % Single stance phase 
     elseif (DS(end)== 2) || (DS(end)== 3) || (DS(end)== 5) || (DS(end)== 6)
         singleStSimOpts = odeset('RelTol',relTol,'AbsTol',absTol,...
             'Events',@(t,x) singleStanceEvent(t,x,DS(end),k_des,dx_des),'MaxStep',dt);
@@ -139,6 +141,7 @@ while T(end) < tFinal
             disp('Ground Phase: Invalid event code');
         end
         
+    % Double stance phase
     elseif (DS(end)== 7) || (DS(end)== 8) 
         doubleStSimOpts = odeset('RelTol',relTol,'AbsTol',absTol,...
             'Events',@(t,x) doubleStanceEvent(t,x,DS(end),k_des,dx_des),'MaxStep',dt);
@@ -182,7 +185,7 @@ while T(end) < tFinal
     LeftFoot = posFootL(Sp(end,:)',sysParam); 
     if (RightFoot(2)<-0.01) || (LeftFoot(2)<-0.01)
         disp('Foot penatrated the ground. Simulation bug somewhere');
-        DS
+        disp(DS)
         break
     end
     

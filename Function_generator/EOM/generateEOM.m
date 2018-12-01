@@ -107,6 +107,13 @@ dthetaR_BF = simplify(jacobian(thetaR_BF,q)*vq);
 thetaL_BF = simplify(atan2((FootL(1)-CoGB(1)),(CoGB(2)-FootL(2))));
 dthetaL_BF = simplify(jacobian(thetaL_BF,q)*vq);
 
+% The spring here is placed between the hip and the foot (increases as the body goes forward)
+% HF stands for hip-foot
+% Right Foot: 
+thetaR_HF = simplify(atan2((Hip(1)-FootR(1)),(Hip(2)-FootR(2))));
+% Left Foot: 
+thetaL_HF = simplify(atan2((Hip(1)-FootL(1)),(Hip(2)-FootL(2))));
+
 %% Theta and dTheta (angle between vertical line and thigh)
 % HK stands for Hip-Knee
 % Right Foot: 
@@ -167,6 +174,9 @@ matlabFunction(thetaR_BF,'file','Functions\ThetaR_BF','vars',{q,param});
 matlabFunction(dthetaR_BF,'file','Functions\dThetaR_BF','vars',{[q;vq],param});
 matlabFunction(thetaL_BF,'file','Functions\ThetaL_BF','vars',{q,param});
 matlabFunction(dthetaL_BF,'file','Functions\dThetaL_BF','vars',{[q;vq],param});
+
+matlabFunction(thetaR_HF,'file','Functions\ThetaR_HF','vars',{q,param});
+matlabFunction(thetaL_HF,'file','Functions\ThetaL_HF','vars',{q,param});
 
 matlabFunction(thetaR_HK,'file','Functions\ThetaR_HK','vars',{q,param});
 matlabFunction(dthetaR_HK,'file','Functions\dThetaR_HK','vars',{[q;vq],param});

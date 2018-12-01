@@ -7,7 +7,7 @@ function dxdt = singleStanceDyn(t,x,phase,k_des,dx_des)
     dxdt(1:n/2) = x(n/2+1:n);
     
     % controller
-%     tau = groundController(x,phase,k_des,dx_des);
+%     tau = groundController(x,phase);
     tau = zeros(n/2,1);
     
     % Calculate Ground Reaction Force

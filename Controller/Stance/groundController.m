@@ -1,10 +1,16 @@
-function tau = groundController(x,phase,k_des,dx_des)
+function tau = groundController(x,phase)
 n = size(x,1);
 tau = zeros(n/2,1);
 
 %% parameters
 param = yumingParameters();
 sysParam = param.sysParam;
+
+% pd gains
+Kp = param.Kp;
+Kd = param.Kd;
+
+
 
 
 %% Limit
