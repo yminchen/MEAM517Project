@@ -187,6 +187,7 @@ end
 %% Symbolically compute input output feedback linearization V2 (leave theta intact)
 
 % TODO: This is not done
+% We dont' need to implement this unless you see that theta is out of range
 
 % Choose which joint to be the output
 chosenColumnForOutput = chosenColumnList;
