@@ -20,12 +20,12 @@
 load('Trajectory_optimization\Nomial_trajectories\Traj2\Data1Step_30-Nov-2018_100nodes.mat');
 
 x0 = x1(1,1);           %[m]    % initial X position 
-y0 = x1(1,2)+0.001;           %[m]    % initial Y position
+y0 = x1(1,2)+0.0001;           %[m]    % initial Y position
 phi0 = x1(1,3);         %[rad]  % initial angle between vertical and hip
 alphaR0 = x1(1,4);      %[rad]  % iniial angle between hip and thigh
 betaR0 = x1(1,5);       %[rad]  % initial angle between thigh and shank
 alphaL0 = x1(1,6);      %[rad]  % iniial angle between hip and thigh
-betaL0 = x1(1,7)+0.05;       %[rad]  % initial angle between thigh and shank
+betaL0 = x1(1,7)-0.05;       %[rad]  % initial angle between thigh and shank
 vx0 = xdot1(1,1);         %[m/s]  % initial X velociy 
 vy0 = xdot1(1,2);         %[m/s]  % initial Y velociy
 vphi0 = xdot1(1,3);       %[rad/s]% initial phi angular velocity

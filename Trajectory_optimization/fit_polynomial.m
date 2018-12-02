@@ -29,7 +29,7 @@ B=zeros(7,4); B(4:7,:)=eye(4);
 % M * ddq = fCG + B*u;
 
 % theta
-theta_symbolic = -(phi + alphaR + betaR/2);
+theta_of_q = -(phi + alphaR + betaR/2);
 
 
 %% Fit polynomials to the data
@@ -138,10 +138,10 @@ for i = 1:numel(chosenColumnForOutput)
     chosenCoeffRow = [chosenCoeffRow, find(chosenColumnList==chosenColumnForOutput(i),1)];
 end
 
-% Construct h_d(theta), where theta is the monotonically increase function (could be leg angle)
+% Construct h_d(q), where theta is the monotonically increase function (could be leg angle)
 h_d = zeros(numel(chosenCoeffRow),1);
 for i = 0:polyOrder
-    h_d = h_d + coeff_all(chosenCoeffRow,i+1)*(theta_symbolic^i);
+    h_d = h_d + coeff_all(chosenCoeffRow,i+1)*(theta_of_q^i);
 end
 
 % Construct output y
@@ -183,3 +183,72 @@ else
     matlabFunction(d_yDot_dq_times_dqdt,'file',['Auto_generated/d_yDot_dq_times_dqdt_',colheaders{chosenCoeffRow}],'vars',{[q;vq],param});
     matlabFunction(d_yDot_ddq,'file',['Auto_generated/d_yDot_ddq_',colheaders{chosenCoeffRow}],'vars',{[q;vq],param});
 end
+
+%% Symbolically compute input output feedback linearization V2 (leave theta intact)
+
+% TODO: This is not done
+
+% Choose which joint to be the output
+chosenColumnForOutput = chosenColumnList;
+
+% Get the coeffcients coresponding to the outputs that we choose
+chosenCoeffRow = [];
+for i = 1:numel(chosenColumnForOutput)
+    chosenCoeffRow = [chosenCoeffRow, find(chosenColumnList==chosenColumnForOutput(i),1)];
+end
+
+syms theta real
+
+% Construct h_d(theta), where theta is the monotonically increase function (could be leg angle)
+h_d = zeros(numel(chosenCoeffRow),1);
+for i = 0:polyOrder
+    h_d = h_d + coeff_all(chosenCoeffRow,i+1)*(theta^i);
+end
+
+% Construct output y
+y = q(chosenColumnForOutput) - h_d;
+
+% IO feedback linearization
+yDot = jacobian(y,q)*vq;
+% The second derivative involves inverse of the mass matrix, so we are not
+% going to get it symbolically here. Instead, we will only get parts of the
+% equation symbolically, and then solve it numerically when using it. 
+% Equation:
+% yDDot = d(yDot)/dx * dx/dt
+%        = d(yDot)/dq * dq/dt + d(yDot)/ddq * ddq/dt
+%        = d(yDot)/dq * dq/dt + d(yDot)/ddq * [(M^-1)*(fCG + B*u)]
+%        = L_f_2_h + L_g_L_f_h * u
+% If we let   
+%     d_yDot_dq_times_dqdt = d(yDot)/dq * dq/dt
+%     d_yDot_ddq           = d(yDot)/ddq
+% then we can rewrite yDDot as
+%     yDDot     = d_yDot_dq_times_dqdt + d_yDot_ddq * (M^-1)*(fCG + B*u)
+% and we also have 
+%     L_f_2_h   = d_yDot_dq_times_dqdt + d_yDot_ddq * (M^-1) * fCG
+%     L_g_L_f_h =                        d_yDot_ddq * (M^-1) * B 
+% 
+% That is, we can derive L_f_2_h and L_g_L_f_h in terms of 
+% d_yDot_dq_times_dqdt, d_yDot_ddq, M, fCG and B.
+
+d_yDot_dq_times_dqdt = jacobian(yDot,q)*vq; 
+d_yDot_ddq = jacobian(yDot,vq);
+
+if ~exist('Auto_generated','dir')
+    mkdir('Auto_generated');
+end
+
+if numel(chosenCoeffRow)>1
+    matlabFunction(d_yDot_dq_times_dqdt,'file',['Auto_generated/d_yDot_dq_times_dqdt_','vector'],'vars',{[q;vq],param});
+    matlabFunction(d_yDot_ddq,'file',['Auto_generated/d_yDot_ddq_','vector'],'vars',{[q;vq],param});
+else 
+    matlabFunction(d_yDot_dq_times_dqdt,'file',['Auto_generated/d_yDot_dq_times_dqdt_',colheaders{chosenCoeffRow}],'vars',{[q;vq],param});
+    matlabFunction(d_yDot_ddq,'file',['Auto_generated/d_yDot_ddq_',colheaders{chosenCoeffRow}],'vars',{[q;vq],param});
+end
+
+
+
+
+
+
+
+

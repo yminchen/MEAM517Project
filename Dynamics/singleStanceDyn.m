@@ -1,4 +1,4 @@
-function dxdt = singleStanceDyn(t,x,phase,k_des,dx_des)
+function dxdt = singleStanceDyn(t,x,phase,dx_des)
     param = yumingParameters();
     sysParam = param.sysParam;
     
@@ -7,6 +7,7 @@ function dxdt = singleStanceDyn(t,x,phase,k_des,dx_des)
     dxdt(1:n/2) = x(n/2+1:n);
     
     % controller
+    t
     tau = groundController(x,phase);
 %     tau = zeros(n/2,1);
     

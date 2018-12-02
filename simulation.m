@@ -1,7 +1,7 @@
 %% Some minor housekeeping 
 clear; clc; clf; close all;
 addpath('Functions','Dynamics','Events',...
-    'Controller','Controller/Flight','Controller/Stance',...
+    'Controller','Controller/Flight','Controller/Stance','Controller/CLF-QP',...
     'Visualization','Visualization/Animation/','Visualization/Animation/Terrain',...
     'Visualization/Plot');
 %% Flags 
@@ -13,33 +13,36 @@ F_SAVEVID = 0;          % Save generated animation
 relTol  = 1e-10;         % Relative tolerance: Relative tolerance for ode45 numerical integration
 absTol  = 1e-10;         % Absolute tolerance: Absolute tolerance for ode45 numerical integration 
 dt      = 0.01; %[s]    % Max time step: Maximum time step for numerica integration 
-tFinal  = 1;    %[s]    % Simulation end time
+tFinal  = .02;    %[s]    % Simulation end time
+
+%% Yu-ming's parameters
+param = yumingParameters();
+dx_des = 0;         % desired speed (initialized to be 0)
 
 %% Initial condition
 sim_init_condition;
 
-%% Yu-ming's parameters
-param = yumingParameters();
-prev_t = 0;
-dx_des = 0;         % desired speed (initialized to be 0)
-dx_des_forPlot = [dx_des 0];
-E_low = 0;          % energy at lowest point (initialized to be 0)
-E_des = 0;          % desired energy (initialized to be 0)
-L_sp_low = 0;       % spring length when mass reaches lowest height 
-k_des = 0;          % desired spring constant during the thrust phase
-k_des_forPlot = [k_des 0];
-x_td = 0;           % state vector at previous touchdown 
-% Ground contact Flag
-contactR = 0;       % true if right foot is touching the ground
-contactL = 0;       % true if left foot is touching the ground
+x0 = [x0;y0;phi0;alphaR0;betaR0;alphaL0;betaL0];
+dx0 = [vx0;vy0;vphi0;valphaR0;vbetaR0;valphaL0;vbetaL0];
+
+sysParam = param.sysParam;
+
+rightFootPotition = posFootR(x0,sysParam);
+leftFootPotition = posFootL(x0,sysParam);
+disp(['Right foot height = ',num2str(rightFootPotition(2)),' (m)'])
+disp(['left foot height = ',num2str(leftFootPotition(2)),' (m)'])
+if rightFootPotition(2) < 0
+    disp('ERROR: Right foot is below the ground in the begining')
+end
+if leftFootPotition(2) < 0
+    disp('ERROR: Left foot is below the ground in the begining')
+end
 
 %% Simulation (the simulation is not prefect at multiple contacts)
 %Setting up simulation
-sysParam = param.sysParam;
 
 T(1) = 0;
-S(1,:) = [x0;y0;phi0;alphaR0;betaR0;alphaL0;betaL0;...
-          vx0;vy0;vphi0;valphaR0;vbetaR0;valphaL0;vbetaL0];
+S(1,:) = [x0;dx0];
 
 DS(1) = 2;  % right leg: flight compression thrust 1 2 3
             % left  leg: flight compression thrust 4 5 6
@@ -91,9 +94,9 @@ while T(end) < tFinal
     % Single stance phase 
     elseif (DS(end)== 2) || (DS(end)== 3) || (DS(end)== 5) || (DS(end)== 6)
         singleStSimOpts = odeset('RelTol',relTol,'AbsTol',absTol,...
-            'Events',@(t,x) singleStanceEvent(t,x,DS(end),k_des,dx_des),'MaxStep',dt);
+            'Events',@(t,x) singleStanceEvent(t,x,DS(end),dx_des),'MaxStep',dt);
         [Tp,Sp,TEp,SEp,Ie] = ode45(@(t,x) singleStanceDyn(t,x,DS(end),...
-            k_des,dx_des),[tspan, tspan(end)+dt],S(end,:),singleStSimOpts);
+            dx_des),[tspan, tspan(end)+dt],S(end,:),singleStSimOpts);
         sz = size(Sp,1);
         DS = [DS;DS(end)*ones(sz-1,1)];
         
@@ -130,9 +133,9 @@ while T(end) < tFinal
     % Double stance phase
     elseif (DS(end)== 7) || (DS(end)== 8) 
         doubleStSimOpts = odeset('RelTol',relTol,'AbsTol',absTol,...
-            'Events',@(t,x) doubleStanceEvent(t,x,DS(end),k_des,dx_des),'MaxStep',dt);
+            'Events',@(t,x) doubleStanceEvent(t,x,DS(end),dx_des),'MaxStep',dt);
         [Tp,Sp,TEp,SEp,Ie] = ode45(@(t,x) doubleStanceDyn(t,x,DS(end),...
-            k_des,dx_des),[tspan, tspan(end)+dt],S(end,:),doubleStSimOpts);
+            dx_des),[tspan, tspan(end)+dt],S(end,:),doubleStSimOpts);
         sz = size(Sp,1);
         DS = [DS;DS(end)*ones(sz-1,1)];
         

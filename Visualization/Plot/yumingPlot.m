@@ -19,38 +19,6 @@ end
 %% Generate the data we want to use
 n = size(T,1);
 
-% get dx_des
-dx_des = zeros(n,1);
-for i = 1:n
-    for j = 2:size(dx_des_forPlot,1)+1
-        if j==size(dx_des_forPlot,1)+1
-            dx_des(i) = dx_des_forPlot(j-1,1);
-            break;
-        end
-        if T(i)<dx_des_forPlot(j,2)
-            dx_des(i) = dx_des_forPlot(j-1,1);
-            break;
-        end
-    end
-end
-
-% get k_des
-k_des = zeros(n,1);
-for i = 1:n
-    for j = 2:size(k_des_forPlot,1)+1
-        if j == size(k_des_forPlot,1)+1
-            k_des(i) = k_des_forPlot(j-1,1);
-            break;
-        end
-        if T(i)<k_des_forPlot(j,2)
-            k_des(i) = k_des_forPlot(j-1,1);
-            break;
-        end
-    end
-end
-
-%% Generate the data we want to see
-
 % length of the virtual spring
 dL_R = zeros(n,1);
 L_R = zeros(n,1);

@@ -47,7 +47,11 @@ param.Kd = 5*eye(n_u);
 % A = [zeros(n_u) eye(n_u);-param.Kp, -param.Kd]; % This matrix has to be Hurwitz
 % disp(eig(A)); 
 
-
+% Min and max leg angle from nominal trajectory
+% Don't load things here, cause it got load whenever you call yumingParamters (slows simulation down by a lot)
+% load('Trajectory_optimization\Nomial_trajectories\Traj2\Data1Step_30-Nov-2018_100nodes.mat');
+param.theta_min = -0.2867;
+param.theta_max = 0.2652;
 
 %% Others
 param.target_pos = 6;

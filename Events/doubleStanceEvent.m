@@ -1,4 +1,4 @@
-function [position, isterminal, direction] = doubleStanceEvent(t,x,phase,k_des,dx_des)
+function [position, isterminal, direction] = doubleStanceEvent(t,x,phase,dx_des)
     param = yumingParameters();
     sysParam = param.sysParam;
     
