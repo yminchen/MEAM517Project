@@ -1,4 +1,36 @@
 
+isLegAngle = 1;
+if isLegAngle 
+    theta_min = param.theta_min;
+    theta_max = param.theta_max;
+    
+    thetaR = approx_leg_angle(S(:,3)',S(:,4)',S(:,5)');
+    figure; hold on;
+    plot(T,thetaR)
+    plot([T(1), T(end)],[theta_min, theta_min],'r')
+    plot([T(1), T(end)],[theta_max, theta_max],'r')
+    title('Right leg angle')
+    
+    thetaL = approx_leg_angle(S(:,3)',S(:,6)',S(:,7)');
+    figure; hold on;
+    plot(T,thetaL)
+    plot([T(1), T(end)],[theta_min, theta_min],'r')
+    plot([T(1), T(end)],[theta_max, theta_max],'r')
+    title('Left leg angle')
+end
+
+
+
+
+
+
+
+
+
+
+
+
+
 %% initialize settings
 %P = [S, L_R, dL_R, E, E_des, tau_R, F_c,  Theta_R, dTheta_R, FootPos_R, tau_L]
 

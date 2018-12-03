@@ -13,7 +13,7 @@ F_SAVEVID = 0;          % Save generated animation
 relTol  = 1e-10;         % Relative tolerance: Relative tolerance for ode45 numerical integration
 absTol  = 1e-10;         % Absolute tolerance: Absolute tolerance for ode45 numerical integration 
 dt      = 0.01; %[s]    % Max time step: Maximum time step for numerica integration 
-tFinal  = .02;    %[s]    % Simulation end time
+tFinal  = 0.4;    %[s]    % Simulation end time
 
 %% Yu-ming's parameters
 param = yumingParameters();
@@ -59,6 +59,7 @@ while T(end) < tFinal
             [tspan, tspan(end)+dt],S(end,:),fltSimOpts);
         sz = size(Sp,1);
         DS = [DS;DS(end)*ones(sz-1,1)];
+        disp(['Current simulation time: ',num2str(Tp(end))]);
         
         if(isempty(Ie)== 1) % Simulation timed out
             disp('Time out');
@@ -99,6 +100,7 @@ while T(end) < tFinal
             dx_des),[tspan, tspan(end)+dt],S(end,:),singleStSimOpts);
         sz = size(Sp,1);
         DS = [DS;DS(end)*ones(sz-1,1)];
+        disp(['Current simulation time: ',num2str(Tp(end))]);
         
         if(isempty(Ie) == 1) % Simulation timed out
             disp('Time out');
@@ -138,6 +140,7 @@ while T(end) < tFinal
             dx_des),[tspan, tspan(end)+dt],S(end,:),doubleStSimOpts);
         sz = size(Sp,1);
         DS = [DS;DS(end)*ones(sz-1,1)];
+        disp(['Current simulation time: ',num2str(Tp(end))]);
         
         if(isempty(Ie) == 1) % Simulation timed out
             disp('Time out');
@@ -205,6 +208,8 @@ plot_flag_index = [8];        % x velocity
 if F_PLOT
     yumingPlot;
 end
+
+
 
 %% Animation
 videoFileName = 'CLF-QP.avi';

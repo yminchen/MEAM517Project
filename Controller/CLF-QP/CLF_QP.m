@@ -1,10 +1,9 @@
-function [mu] = CLF_QP(n_u, eta, Lg_Lf_y, u_star)
+function [mu] = CLF_QP(n_u, epsilon, eta, Lg_Lf_y, u_star)
     u_min = -25;
     u_max = 25;
     
     %% Choose the CLF    
     % Paramters
-    epsilon = 0.1;      % control the converge rate
     c3 = 0.001; % Need to tune this! 
                 % (I think for small enough number, there exsits a solution for the QP)
     
@@ -59,7 +58,10 @@ function [mu] = CLF_QP(n_u, eta, Lg_Lf_y, u_star)
           bumax         ];
 
     % Solve
-    x = quadprog(H,f,A,b);
+%     x = quadprog(H,f,A,b);
+    Aeq=[];beq=[];lb=[];ub=[];x0=[];
+    options = optimoptions('quadprog','Display','off');
+    x = quadprog(H,f,A,b,Aeq,beq,lb,ub,x0,options);
     
     % extract solution
     mu = x(1:4);

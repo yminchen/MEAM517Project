@@ -12,7 +12,7 @@ syms m1 J1 lH m2 J2 l2 lL2 m3 J3 l3 lL3 real
 syms g real
 % Math
 syms PI real
-param = [m1 J1 lH m2 J2 l2 lL2 m3 J3 l3 lL3 g PI];
+sysParam_minCoord = [m1 J1 lH m2 J2 l2 lL2 m3 J3 l3 lL3 g PI];
 
 %% Represent some of the floating base coordinates
 betaStance = -qm2; 
