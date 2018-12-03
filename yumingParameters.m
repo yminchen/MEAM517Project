@@ -23,10 +23,16 @@ param.lL3 = 0.2385;      %[m]          Distance from knee center to foot center
 
 % Environmental constants
 param.g = 9.81;          %[m/s^2]      Accelerations due to gravity
+
 sysParam = [param.m1 param.J1 param.lH ...
             param.m2 param.J2 param.l2 param.lL2 ...
             param.m3 param.J3 param.l3 param.lL3 param.g];
 param.sysParam = sysParam;
+
+sysParam_minCoord = [param.m1 param.J1 param.lH ...
+            param.m2 param.J2 param.l2 param.lL2 ...
+            param.m3 param.J3 param.l3 param.lL3 param.g pi];
+param.sysParam_minCoord = sysParam_minCoord;
 
 %% Actuator constraint parameters
 n_u = 4;

@@ -24,6 +24,8 @@ clear;
 
 syms betaStance alphaStance phi alphaSwing betaSwing real
 q = [betaStance; alphaStance; phi; alphaSwing; betaSwing];
+syms dbetaStance dalphaStance dphi dalphaSwing dbetaSwing real
+dq = [dbetaStance; dalphaStance; dphi; dalphaSwing; dbetaSwing];
  
 syms PI
 param = PI;
@@ -35,15 +37,15 @@ qm3 = 2*PI - alphaStance;
 qm2 = -betaStance;
 qm1 = phi - qm2 - qm3 + 2*PI;
 
+qm = [qm1; qm2; qm3; qm4; qm5];
+dqm = jacobian(qm,q)*dq;
+
 %% Create functions
 if ~exist('Functions','dir')
     mkdir('Functions');
 end
 
-matlabFunction(qm1,'file','Functions\q1_MinCoord','vars',{q,param});
-matlabFunction(qm2,'file','Functions\q2_MinCoord','vars',{q,param});
-matlabFunction(qm3,'file','Functions\q3_MinCoord','vars',{q,param});
-matlabFunction(qm4,'file','Functions\q4_MinCoord','vars',{q,param});
-matlabFunction(qm5,'file','Functions\q5_MinCoord','vars',{q,param});
+matlabFunction(qm,'file','Functions\q_MinCoord','vars',{q,param});
+matlabFunction(dqm,'file','Functions\dq_MinCoord','vars',{dq,param});
 
 

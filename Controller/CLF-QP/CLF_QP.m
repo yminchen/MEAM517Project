@@ -35,7 +35,7 @@ function [mu] = CLF_QP(n_u, eta, Lg_Lf_y, u_star)
     %% CLF-QP
     % Parameter
     p = 10000; % penalty on constraint (dV <= -k*V) violation 
-    isWithoutTorqueSaturation = false;
+    isWithoutTorqueSaturation = true;
     
     % Plug in values
     A_mu = eye(n_u);
