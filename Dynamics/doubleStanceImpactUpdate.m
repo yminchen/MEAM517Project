@@ -20,6 +20,7 @@ function [dqplus,nextPhase] = doubleStanceImpactUpdate(x,phase)
             nextPhase = 5;
             J = JL;
             dqplus = (eye(n/2) - (M\J')*pinv(J*(M\J'))*J)*x(n/2+1:n);
+            % dqplus_LAMBDA = [M -J';J zeros(2)]\[M*x(n/2+1:n);zeros(2,1)];
             
 %             Testing
 %             velFootR = JR*dqplus;

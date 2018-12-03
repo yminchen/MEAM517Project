@@ -1,3 +1,21 @@
+% TODO: 
+% Inivestigate why the stance foot leave the ground (is the stance knee 
+% toque too negative?)
+% (currently, the event for entering flight is turned off. Need to turn it on)
+
+% plot the knee joint velocity out 
+% plot the input out
+% plot the contact force out
+
+% Tune the paramter c3 in the CLF_QP function
+
+% Find out why the QP (CLF-QP with torque saturation) is infeasible
+% This might be related to the wierd behavior of HZD controller (u star) at
+% touchdown.
+% Maybe because the leg angle exceeds the bound
+% Is it because the transition mapping is incorrect (either in simulation 
+% or in trajectory optimization)
+
 %% Some minor housekeeping 
 clear; clc; clf; close all;
 addpath('Functions','Dynamics','Events',...
@@ -13,7 +31,7 @@ F_SAVEVID = 0;          % Save generated animation
 relTol  = 1e-10;         % Relative tolerance: Relative tolerance for ode45 numerical integration
 absTol  = 1e-10;         % Absolute tolerance: Absolute tolerance for ode45 numerical integration 
 dt      = 0.01; %[s]    % Max time step: Maximum time step for numerica integration 
-tFinal  = 0.4;    %[s]    % Simulation end time
+tFinal  = 3;    %[s]    % Simulation end time
 
 %% Yu-ming's parameters
 param = yumingParameters();
@@ -191,15 +209,16 @@ n_plot = 28;
 plot_flag_index = [3 10 19 20 21 22];
 plot_flag_index = [3 10 19 20 ];   % look at phi and joint torque
 plot_flag_index = [3 10 ];     % look at phi
-plot_flag_index = [19 20 ];   % look at joint torque
-plot_flag_index = [17 18];    % look at energy
+plot_flag_index = [19 20 ];   % look at right leg torque
+% plot_flag_index = [27 28 ];   % look at left leg torque
+% plot_flag_index = [17 18];    % look at energy
 % plot_flag_index = [19 20 23 24]; % tune PD controller for theta in flight
 % plot_flag_index = [4 11 19];    % tune PD controller for hip in flight
 % plot_flag_index = [4  ];    % tune PD controller for hip in flight
 % plot_flag_index = [5  12 19 20];    % tune PD controller for knee in flight
 % plot_flag_index = [5  12];
 % plot_flag_index = [15 16];    % look at spring length and speed
-plot_flag_index = [8];        % x velocity
+% plot_flag_index = [8];        % x velocity
 % plot_flag_index = [1 8];      % x
 % plot_flag_index = [21 22];    % gound reaction force
 % plot_flag_index = [25 26];    % Foot position
@@ -208,6 +227,7 @@ plot_flag_index = [8];        % x velocity
 if F_PLOT
     yumingPlot;
 end
+
 
 
 

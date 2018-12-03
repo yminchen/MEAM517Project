@@ -1,22 +1,35 @@
 
-isLegAngle = 1;
+isLegAngle = 0;
 if isLegAngle 
     theta_min = param.theta_min;
     theta_max = param.theta_max;
     
+    figure; 
     thetaR = approx_leg_angle(S(:,3)',S(:,4)',S(:,5)');
-    figure; hold on;
+    min_height = min(thetaR);
+    max_height = max(thetaR);
+    plotPhaseZone_singleStanceWalk;
+    
+    hold on;
     plot(T,thetaR)
     plot([T(1), T(end)],[theta_min, theta_min],'r')
     plot([T(1), T(end)],[theta_max, theta_max],'r')
     title('Right leg angle')
     
+    
+    figure; 
     thetaL = approx_leg_angle(S(:,3)',S(:,6)',S(:,7)');
-    figure; hold on;
+    
+    min_height = min(thetaL);
+    max_height = max(thetaL);
+    plotPhaseZone_singleStanceWalk;
+    
+    hold on;
     plot(T,thetaL)
     plot([T(1), T(end)],[theta_min, theta_min],'r')
     plot([T(1), T(end)],[theta_max, theta_max],'r')
     title('Left leg angle')
+
 end
 
 
@@ -96,7 +109,7 @@ if plot_flag(19)||plot_flag(20)||plot_flag(27)||plot_flag(28)
             tau_R(i,:) = tau_temp(4:5,1)';
             tau_L(i,:) = tau_temp(6:7,1)';
         else
-            tau_temp = groundController(S(i,:)',DS(i),k_des(i),dx_des(i));
+            tau_temp = groundController(S(i,:)',DS(i));
             tau_R(i,:) = tau_temp(4:5,1)';
             tau_L(i,:) = tau_temp(6:7,1)';
         end
@@ -108,7 +121,7 @@ F_c = zeros(n,2);
 if plot_flag(21)||plot_flag(22)
     for i = 1:n
         if DS(i)~=1 && DS(i)~=4
-            tau_temp = groundController(S(i,:)',DS(i),k_des(i),dx_des(i));
+            tau_temp = groundController(S(i,:)',DS(i));
 
             M = MassMatrix(S(i,1:7)',sysParam);
             if DS(i)==2 || DS(i)==3
@@ -169,8 +182,12 @@ figure;
 axis([T(1) T(end) min_height max_height]);
 
 % plot states
-plotStates;    
+% plotStates;    
+% legend('show');
+
 legend('show');
+% plot phase
+plotPhaseZone_singleStanceWalk;
 
 % plot states 
 plotStates;    

@@ -4,7 +4,7 @@ function [mu] = CLF_QP(n_u, epsilon, eta, Lg_Lf_y, u_star)
     
     %% Choose the CLF    
     % Paramters
-    c3 = 0.001; % Need to tune this! 
+    c3 = 1;%0.001; % Need to tune this! 
                 % (I think for small enough number, there exsits a solution for the QP)
     
     Kp = 10*eye(n_u);   % P gain for PD control (used to chose CLF)
@@ -34,13 +34,13 @@ function [mu] = CLF_QP(n_u, epsilon, eta, Lg_Lf_y, u_star)
     %% CLF-QP
     % Parameter
     p = 10000; % penalty on constraint (dV <= -k*V) violation 
-    isWithoutTorqueSaturation = true;
+    isTorqueSaturation = false;
     
     % Plug in values
     A_mu = eye(n_u);
     bumin = Lg_Lf_y*(u_min-u_star);
     bumax = Lg_Lf_y*(u_max-u_star);
-    if isWithoutTorqueSaturation
+    if ~isTorqueSaturation
         A_mu = zeros(n_u);
         bumin = zeros(n_u,1);
         bumax = zeros(n_u,1);
@@ -60,7 +60,7 @@ function [mu] = CLF_QP(n_u, epsilon, eta, Lg_Lf_y, u_star)
     % Solve
 %     x = quadprog(H,f,A,b);
     Aeq=[];beq=[];lb=[];ub=[];x0=[];
-    options = optimoptions('quadprog','Display','off');
+    options = optimoptions('quadprog','Display','final'); % off, final
     x = quadprog(H,f,A,b,Aeq,beq,lb,ub,x0,options);
     
     % extract solution

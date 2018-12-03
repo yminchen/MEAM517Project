@@ -16,14 +16,26 @@ sysParam_minCoord = param.sysParam_minCoord;
 Kp = param.Kp;
 Kd = param.Kd;
 
-%% Testing (see if the leg angle exceeds the bound)
+epsilon = 0.01;     % control the converge rate
+                    % converges fast when epsilon is small
+                    
+% (Kp, Kd, epsilon) = (10, 2, 0.01) is good. (better than 10, 2, 0.1)
+
+%% Decide which leg is the stance leg
 if phase==1 || phase==2 || phase==3 || phase==7
+    isRightLegStance = true;
+else
+    isRightLegStance = false;
+end
+
+%% Testing (see if the leg angle exceeds the bound)
+if isRightLegStance
     theta = approx_leg_angle(x(3),x(4),x(5)); 
 else
     theta = approx_leg_angle(x(3),x(6),x(7)); 
 end
 if theta > param.theta_max || theta < param.theta_min 
-%     theta = theta
+    theta = theta
 end    
 
 %% Nominal control (input output feedback linearization)
@@ -34,7 +46,7 @@ end
 
 % Get qm and dqm
     % q_float_partial order:  betaStance alphaStance phi alphaSwing betaSwing
-if phase==1 || phase==2 || phase==3 || phase==7
+if isRightLegStance
     q_float_partial = [q(5);q(4);q(3);q(6);q(7)];
     dq_float_partial = [dq(5);dq(4);dq(3);dq(6);dq(7)];
 else
@@ -67,9 +79,6 @@ control_option = 2; % 0: no feedback
                     % 1: PD feedback control
                     % 2: CLF_QP
 
-% Parameters
-epsilon = 0.1;      % control the converge rate
-
 y = y_output_vector(xm,sysParam_minCoord);
 dy = dy_output_vector(xm,sysParam_minCoord);
 eta = [y;dy];
@@ -87,7 +96,7 @@ end
 u = u_star + L_g_L_f_y\mu;
 
 % re-ordering 
-if phase==1 || phase==2 || phase==3 || phase==7
+if isRightLegStance
     tau(4:7) = u;
 else
     tau(4:7) = u([3 4 1 2]);

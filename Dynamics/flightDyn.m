@@ -8,6 +8,7 @@ function dxdt = flightDyn(t,x,phase)
     
     %controller
 %     tau = flightController(x,phase);
+%     tau = groundController(x,phase);
     tau = zeros(n/2,1);
     
     dxdt(n/2+1:n) = MassMatrix(x(1:n/2),sysParam)\(FCorGrav(x,sysParam)+tau);

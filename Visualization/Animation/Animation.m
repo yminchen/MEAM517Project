@@ -33,7 +33,7 @@ axis equal;
 boarderR = max(X(:,1))+1;
 boarderL = min(X(:,1))-2;
 boarderT = max(X(:,2))+0.5;
-axis([boarderL boarderR -0.8 boarderT])
+axis([boarderL boarderR -0.2 boarderT])
 % axis([boarderL 2 -0.1 2])
 
 % Plot ground
