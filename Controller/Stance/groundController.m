@@ -41,7 +41,7 @@ else
     theta = approx_leg_angle(x(3),x(6),x(7)); 
 end
 if theta > param.theta_max || theta < param.theta_min 
-    theta = theta
+    theta = max(param.theta_min,min(param.theta_max,theta));
 end    
 
 %% Nominal control (input output feedback linearization)
@@ -72,23 +72,23 @@ B=zeros(5,4);   B(2,2)=-1;
                 % This definition of B gives the input in this order:
                 % st_hip, st_knee, sw_hip, sw_knee
 
-d_yDot_ddq = d_yDot_ddq_vector(xm,sysParam_minCoord);
-d_yDot_dq_times_dqdt = d_yDot_dq_times_dqdt_vector(xm,sysParam_minCoord);
+d_yDot_ddq = d_yDot_ddq_theta_vector(xm,theta,sysParam_minCoord);
+IO_FB_term1 = IO_FB_term1_theta_vector(xm,theta,sysParam_minCoord);
 
-L_f_2_y = d_yDot_dq_times_dqdt + d_yDot_ddq * (M\fCG);
-L_g_L_f_y =                      d_yDot_ddq * (M\B  );
+L_f_2_y = IO_FB_term1 + d_yDot_ddq * (M\fCG);
+L_g_L_f_y =             d_yDot_ddq * (M\B  );
 
 u_star = - L_g_L_f_y\L_f_2_y;
 
 %% Feedback control on output
-control_option = 4; % 0: no feedback
+control_option = 2; % 0: no feedback
                     % 1: PD feedback control
                     % 2: CLF_QP
                     % 3: CLF_QP with torque saturation
                     % 4: robust CLF_QP with torque saturation
 
-y = y_output_vector(xm,sysParam_minCoord);
-dy = dy_output_vector(xm,sysParam_minCoord);
+y = y_output_theta_vector(xm,theta,sysParam_minCoord);
+dy = dy_output_theta_vector(xm,theta,sysParam_minCoord);
 eta = [y;dy];
 if control_option == 0      % no feedback control
     mu = zeros(n_u,1);

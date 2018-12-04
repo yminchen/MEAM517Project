@@ -12,6 +12,7 @@
 % Tune the paramter c3 in the CLF_QP function
 
 % For robust CLF-QP, you can calculate whether the delta_H and delta_G exceed the bound.
+% Test if the controller fail when delta_G and delta_H is out of the predifined maximum bound. 
 
 %% Some minor housekeeping 
 clear; clc; clf; close all;
@@ -29,7 +30,7 @@ F_SAVEVID = 0;          % Save generated animation
 relTol  = 1e-6;%1e-10;         % Relative tolerance: Relative tolerance for ode45 numerical integration
 absTol  = 1e-6;%1e-10;         % Absolute tolerance: Absolute tolerance for ode45 numerical integration 
 dt      = 0.01; %[s]    % Max time step: Maximum time step for numerica integration 
-tFinal  = 0.5;    %[s]    % Simulation end time
+tFinal  = 2.5;    %[s]    % Simulation end time
 
 %% Yu-ming's parameters
 param = yumingParameters();

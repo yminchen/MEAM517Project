@@ -3,14 +3,15 @@ function [mu] = CLF_QP(n_u, eta, Lg_Lf_y, u_star, isTorqueSaturation, isRobustTo
     u_max = 25;
     
     %% parameters for robust CLF_QP
-    delta_H_max = 0.1;
+    delta_H_max = 0.1; % seems like the bigger this is, the more unstable the controller is
     delta_G_max = 0.1;
     % TODO: you can calculate whether the delta_H and delta_G exceed the
     % bound.
     
     %% Choose the CLF    
     % Paramters
-    epsilon = 0.01;
+    epsilon = 0.01; % seems that smaller epsilon make the controller stable?
+                    % at least 0.01 is better than 0.1 
     c3 = 0.001; % Need to tune this! 
                 % (I think for small enough number, there exsits a solution for the QP)
     
