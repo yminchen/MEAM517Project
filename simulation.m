@@ -1,17 +1,4 @@
 % TODO: 
-% Inivestigate why the stance foot leave the ground (is the stance knee 
-% toque too negative?)
-% (currently, the event for entering flight is turned off. Need to turn it on)
-
-% Find out why the QP (CLF-QP with torque saturation) is infeasible
-% This might be related to the wierd behavior of HZD controller (u star) at
-% touchdown.
-% Maybe because the leg angle exceeds the bound
-% Is it because the transition mapping is incorrect (either in simulation 
-% or in trajectory optimization)
-% !!!
-% I think I know why. You cannot times a matrix on both sides of an
-% inquality!! You can use A\eye(3) to get the inverse of A efficiently.
 
 % You can:
 % plot the knee joint velocity out 
@@ -39,7 +26,7 @@ F_SAVEVID = 0;          % Save generated animation
 relTol  = 1e-10;         % Relative tolerance: Relative tolerance for ode45 numerical integration
 absTol  = 1e-10;         % Absolute tolerance: Absolute tolerance for ode45 numerical integration 
 dt      = 0.01; %[s]    % Max time step: Maximum time step for numerica integration 
-tFinal  = 1;    %[s]    % Simulation end time
+tFinal  = 0.5;    %[s]    % Simulation end time
 
 %% Yu-ming's parameters
 param = yumingParameters();
