@@ -35,12 +35,12 @@ function [mu] = CLF_QP(n_u, eta, Lg_Lf_y, u_star)
     %% CLF-QP
     % Parameter
     p = 1;%10000 % penalty on constraint (dV <= -k*V) violation 
-    isTorqueSaturation = false;
+    isTorqueSaturation = true;
     
     % Plug in values
-    A_mu = eye(n_u);
-    bumin = Lg_Lf_y*(u_min-u_star);
-    bumax = Lg_Lf_y*(u_max-u_star);
+    A_mu = Lg_Lf_y\eye(n_u);
+    bumin = (u_min-u_star);
+    bumax = (u_max-u_star);
     if ~isTorqueSaturation
         A_mu = zeros(n_u);
         bumin = zeros(n_u,1);

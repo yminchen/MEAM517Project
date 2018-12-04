@@ -3,18 +3,25 @@
 % toque too negative?)
 % (currently, the event for entering flight is turned off. Need to turn it on)
 
-% plot the knee joint velocity out 
-% plot the input out
-% plot the contact force out
-
-% Tune the paramter c3 in the CLF_QP function
-
 % Find out why the QP (CLF-QP with torque saturation) is infeasible
 % This might be related to the wierd behavior of HZD controller (u star) at
 % touchdown.
 % Maybe because the leg angle exceeds the bound
 % Is it because the transition mapping is incorrect (either in simulation 
 % or in trajectory optimization)
+% !!!
+% I think I know why. You cannot times a matrix on both sides of an
+% inquality!! You can use A\eye(3) to get the inverse of A efficiently.
+
+% You can:
+% plot the knee joint velocity out 
+% plot the input out
+% plot the contact force out
+
+% Change quadprog to SNOPT. See if the speed can be improved significantly.
+
+% Tune the paramter c3 in the CLF_QP function
+
 
 %% Some minor housekeeping 
 clear; clc; clf; close all;
