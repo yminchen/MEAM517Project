@@ -3,8 +3,8 @@ function [mu] = CLF_QP(n_u, eta, Lg_Lf_y, u_star, isTorqueSaturation, isRobustTo
     u_max = 25;
     
     %% parameters for robust CLF_QP
-    delta_H_max = 0.5;
-    delta_G_max = 0.5;
+    delta_H_max = 0.1;
+    delta_G_max = 0.1;
     % TODO: you can calculate whether the delta_H and delta_G exceed the
     % bound.
     

@@ -1,5 +1,7 @@
 % TODO: 
 
+% Now the transition from stance to flight is disabled. Turn this back on in the future
+
 % You can:
 % plot the knee joint velocity out 
 % plot the input out
@@ -9,7 +11,7 @@
 
 % Tune the paramter c3 in the CLF_QP function
 
-% you can calculate whether the delta_H and delta_G exceed the bound.
+% For robust CLF-QP, you can calculate whether the delta_H and delta_G exceed the bound.
 
 %% Some minor housekeeping 
 clear; clc; clf; close all;
@@ -24,8 +26,8 @@ F_SAVEPLOT = 0;         % Save generated plot
 F_ANIMATE = 1;          % Animate system response
 F_SAVEVID = 0;          % Save generated animation   
 %% Simulation control
-relTol  = 1e-10;         % Relative tolerance: Relative tolerance for ode45 numerical integration
-absTol  = 1e-10;         % Absolute tolerance: Absolute tolerance for ode45 numerical integration 
+relTol  = 1e-6;%1e-10;         % Relative tolerance: Relative tolerance for ode45 numerical integration
+absTol  = 1e-6;%1e-10;         % Absolute tolerance: Absolute tolerance for ode45 numerical integration 
 dt      = 0.01; %[s]    % Max time step: Maximum time step for numerica integration 
 tFinal  = 0.5;    %[s]    % Simulation end time
 
@@ -218,7 +220,7 @@ plot_flag_index = [19 20 ];   % look at right leg torque
 % plot_flag_index = [15 16];    % look at spring length and speed
 % plot_flag_index = [8];        % x velocity
 % plot_flag_index = [1 8];      % x
-% plot_flag_index = [21 22];    % gound reaction force
+plot_flag_index = [21 22];    % gound reaction force
 % plot_flag_index = [25 26];    % Foot position
 % plot_flag_index = [2];        % y
 

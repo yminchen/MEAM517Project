@@ -7,7 +7,7 @@ function dxdt = singleStanceDyn(t,x,phase,dx_des)
     dxdt(1:n/2) = x(n/2+1:n);
     
     % controller
-    t
+%     t
     tau = groundController(x,phase);
 %     tau = zeros(n/2,1);
     

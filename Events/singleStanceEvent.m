@@ -20,6 +20,7 @@ function [position, isterminal, direction] = singleStanceEvent(t,x,phase,dx_des)
     lamda = -(J*(M\J'))\(J*(M\(fCG+tau)) + dJ*x(n/2+1:n));
         
     position(1)     = lamda(2);
+%     position(1)     = 1; % never enter flight
     isterminal(1)   = 1;
     direction(1)    = -1;
     
