@@ -9,6 +9,7 @@
 
 % Tune the paramter c3 in the CLF_QP function
 
+% you can calculate whether the delta_H and delta_G exceed the bound.
 
 %% Some minor housekeeping 
 clear; clc; clf; close all;
@@ -196,7 +197,7 @@ while T(end) < tFinal
     
 end
 
-simulationTime = toc
+time_to_run_simulation = toc
 
 %% Plot 
 

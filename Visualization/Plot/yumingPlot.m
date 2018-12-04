@@ -105,7 +105,7 @@ tau_L = zeros(n,2);
 if plot_flag(19)||plot_flag(20)||plot_flag(27)||plot_flag(28)
     for i = 1:n
         if DS(i) == 1 || DS(i) == 4
-            tau_temp = flightController(S(i,:)',t_prev_stance(i),DS(i));
+            tau_temp = flightController(S(i,:)',DS(i));
             tau_R(i,:) = tau_temp(4:5,1)';
             tau_L(i,:) = tau_temp(6:7,1)';
         else

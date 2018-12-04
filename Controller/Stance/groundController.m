@@ -9,8 +9,14 @@ n_u = 4;
 
 %% parameters
 param = yumingParameters();
-sysParam = param.sysParam;
-sysParam_minCoord = param.sysParam_minCoord;
+
+isModelPerturbation = true; % Whether there is modeling error 
+if isModelPerturbation 
+    scale = 1;
+    sysParam_minCoord = sysParam_minCoord_pertrubed(scale,param.sysParam_minCoord);
+else
+    sysParam_minCoord = param.sysParam_minCoord;
+end
 
 % pd gains
 Kp = param.Kp;
@@ -75,9 +81,11 @@ L_g_L_f_y =                      d_yDot_ddq * (M\B  );
 u_star = - L_g_L_f_y\L_f_2_y;
 
 %% Feedback control on output
-control_option = 2; % 0: no feedback
+control_option = 4; % 0: no feedback
                     % 1: PD feedback control
                     % 2: CLF_QP
+                    % 3: CLF_QP with torque saturation
+                    % 4: robust CLF_QP with torque saturation
 
 y = y_output_vector(xm,sysParam_minCoord);
 dy = dy_output_vector(xm,sysParam_minCoord);
@@ -87,7 +95,11 @@ if control_option == 0      % no feedback control
 elseif control_option == 1  % PD feedback control
     mu = [-Kp/epsilon^2, -Kd/epsilon]*eta;
 elseif control_option == 2  % CLF_QP 
-    mu = CLF_QP(n_u, eta, L_g_L_f_y, u_star);
+    mu = CLF_QP(n_u, eta, L_g_L_f_y, u_star, false, false);
+elseif control_option == 3  % CLF_QP with torque saturation
+    mu = CLF_QP(n_u, eta, L_g_L_f_y, u_star, true, false);
+elseif control_option == 4  % robust CLF_QP with torque saturation 
+    mu = CLF_QP(n_u, eta, L_g_L_f_y, u_star, true, true);
 else
     disp('ERROR in controller selection');
 end
