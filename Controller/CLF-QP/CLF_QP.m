@@ -34,7 +34,7 @@ function [mu] = CLF_QP(n_u, eta, Lg_Lf_y, u_star)
 
     %% CLF-QP
     % Parameter
-    p = 10000; % penalty on constraint (dV <= -k*V) violation 
+    p = 1;%10000 % penalty on constraint (dV <= -k*V) violation 
     isTorqueSaturation = false;
     
     % Plug in values
