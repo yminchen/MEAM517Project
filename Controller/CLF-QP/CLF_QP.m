@@ -1,10 +1,11 @@
-function [mu] = CLF_QP(n_u, epsilon, eta, Lg_Lf_y, u_star)
+function [mu] = CLF_QP(n_u, eta, Lg_Lf_y, u_star)
     u_min = -25;
     u_max = 25;
     
     %% Choose the CLF    
     % Paramters
-    c3 = 1;%0.001; % Need to tune this! 
+    epsilon = 0.1;
+    c3 = 1; % Need to tune this! 
                 % (I think for small enough number, there exsits a solution for the QP)
     
     Kp = 10*eye(n_u);   % P gain for PD control (used to chose CLF)

@@ -87,7 +87,7 @@ if control_option == 0      % no feedback control
 elseif control_option == 1  % PD feedback control
     mu = [-Kp/epsilon^2, -Kd/epsilon]*eta;
 elseif control_option == 2  % CLF_QP 
-    mu = CLF_QP(n_u, epsilon, eta, L_g_L_f_y, u_star);
+    mu = CLF_QP(n_u, eta, L_g_L_f_y, u_star);
 else
     disp('ERROR in controller selection');
 end

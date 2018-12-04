@@ -18,6 +18,7 @@
 
 %% Some minor housekeeping 
 clear; clc; clf; close all;
+restoredefaultpath;     % In case, the old version of quadprog is called...
 addpath('Functions','Dynamics','Events',...
     'Controller','Controller/Flight','Controller/Stance','Controller/CLF-QP',...
     'Visualization','Visualization/Animation/','Visualization/Animation/Terrain',...
@@ -31,7 +32,7 @@ F_SAVEVID = 0;          % Save generated animation
 relTol  = 1e-10;         % Relative tolerance: Relative tolerance for ode45 numerical integration
 absTol  = 1e-10;         % Absolute tolerance: Absolute tolerance for ode45 numerical integration 
 dt      = 0.01; %[s]    % Max time step: Maximum time step for numerica integration 
-tFinal  = 3;    %[s]    % Simulation end time
+tFinal  = 0.2;    %[s]    % Simulation end time
 
 %% Yu-ming's parameters
 param = yumingParameters();
