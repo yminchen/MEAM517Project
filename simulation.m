@@ -236,8 +236,7 @@ if F_PLOT
 end
 
 
-
-
+    
 %% Animation
 videoTitle = 'CLF-QP';
 videoFileName = [videoTitle,'.avi'];

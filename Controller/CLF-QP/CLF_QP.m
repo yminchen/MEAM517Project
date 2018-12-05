@@ -1,6 +1,8 @@
-function [mu] = CLF_QP(n_u, eta, Lg_Lf_y, u_star, isTorqueSaturation, isRobustToModelPerturbation)
-    u_min = -25;
-    u_max = 25;
+function [mu] = CLF_QP(eta, Lg_Lf_y, u_star, torque_max, isTorqueSaturation, isRobustToModelPerturbation)
+    n_u = size(eta,1)/2;
+    
+    u_min = -torque_max;
+    u_max = torque_max;
     
     %% parameters for robust CLF_QP
     delta_H_max = 0.1; % seems like the bigger this is, the more unstable the controller is

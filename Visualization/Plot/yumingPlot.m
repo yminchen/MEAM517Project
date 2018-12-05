@@ -1,6 +1,56 @@
 
-isLegAngle = 0;
-if isLegAngle 
+%% plot the output y
+isPlotOutputY = true;
+
+if isPlotOutputY
+    sysParam_minCoord = param.sysParam_minCoord;
+    y = [];
+    for i = 1:numel(DS)
+        phase = DS(i);
+        q = S(i,1:7)';
+        dq = S(i,8:14)';
+
+        if phase==1 || phase==2 || phase==3 || phase==7
+            isRightLegStance = true;
+        else
+            isRightLegStance = false;
+        end
+
+        if isRightLegStance
+            theta = approx_leg_angle(q(3),q(4),q(5)); 
+        else
+            theta = approx_leg_angle(q(3),q(6),q(7)); 
+        end
+        if theta > param.theta_max || theta < param.theta_min 
+            theta = max(param.theta_min,min(param.theta_max,theta));
+        end    
+
+        if isRightLegStance
+            q_float_partial = [q(5);q(4);q(3);q(6);q(7)];
+            dq_float_partial = [dq(5);dq(4);dq(3);dq(6);dq(7)];
+        else
+            q_float_partial = [q(7);q(6);q(3);q(4);q(5)];
+            dq_float_partial = [dq(7);dq(6);dq(3);dq(4);dq(5)];
+        end    
+        qm = q_MinCoord(q_float_partial,pi);
+        dqm = dq_MinCoord(dq_float_partial,pi);
+        xm = [qm;dqm];
+
+        y_temp = y_output_theta_vector(xm,theta,sysParam_minCoord);
+        y = [y;y_temp'];
+    end
+    figure
+    min_height = min(min(y));
+    max_height = max(max(y));
+    plotPhaseZone_singleStanceWalk;
+    
+    hold on;
+    plot(T,y) 
+end
+
+%% Plot leg angle
+isPlotLegAngle = 0;
+if isPlotLegAngle 
     theta_min = param.theta_min;
     theta_max = param.theta_max;
     
@@ -41,7 +91,7 @@ end
 
 
 
-
+%%%%%%%%%%%%%%%%%%%%%%%%%% Old plotting function %%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 %% initialize settings

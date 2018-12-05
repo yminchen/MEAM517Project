@@ -9,6 +9,7 @@ n_u = 4;
 
 %% parameters
 param = yumingParameters();
+torque_max = param.tau_max; % motor torque max
 
 isModelPerturbation = true; % Whether there is modeling error 
 if isModelPerturbation 
@@ -34,7 +35,7 @@ else
     isRightLegStance = false;
 end
 
-%% Testing (see if the leg angle exceeds the bound)
+%% See if the leg angle exceeds the bound
 if isRightLegStance
     theta = approx_leg_angle(x(3),x(4),x(5)); 
 else
@@ -81,7 +82,7 @@ L_g_L_f_y =             d_yDot_ddq * (M\B  );
 u_star = - L_g_L_f_y\L_f_2_y;
 
 %% Feedback control on output
-control_option = 4; % 0: no feedback
+control_option = 1; % 0: no feedback
                     % 1: PD feedback control
                     % 2: CLF_QP
                     % 3: CLF_QP with torque saturation
@@ -95,11 +96,11 @@ if control_option == 0      % no feedback control
 elseif control_option == 1  % PD feedback control
     mu = [-Kp/epsilon^2, -Kd/epsilon]*eta;
 elseif control_option == 2  % CLF_QP 
-    mu = CLF_QP(n_u, eta, L_g_L_f_y, u_star, false, false);
+    mu = CLF_QP(eta, L_g_L_f_y, u_star, torque_max, false, false);
 elseif control_option == 3  % CLF_QP with torque saturation
-    mu = CLF_QP(n_u, eta, L_g_L_f_y, u_star, true, false);
+    mu = CLF_QP(eta, L_g_L_f_y, u_star, torque_max, true, false);
 elseif control_option == 4  % robust CLF_QP with torque saturation 
-    mu = CLF_QP(n_u, eta, L_g_L_f_y, u_star, true, true);
+    mu = CLF_QP(eta, L_g_L_f_y, u_star, torque_max, true, true);
 else
     disp('ERROR in controller selection');
 end
@@ -115,11 +116,10 @@ else
 end    
 
 %% Limit
-tau_max = param.tau_max;
 if param.torque_limit_flag
     for i = 4:7
-        if abs(tau(i))>tau_max
-            tau(i) = sign(tau(i))*tau_max;
+        if abs(tau(i))>torque_max
+            tau(i) = sign(tau(i))*torque_max;
         end
     end
 end
