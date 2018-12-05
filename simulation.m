@@ -5,6 +5,9 @@
 % You can get a better trajectory. Currently the swing knee kind of over
 % extend right before touchdown.
 
+% You can test whether the torque saturation is working or not by setting
+% torque limit in the QP to be a lower value.
+
 % You can:
 % plot the knee joint velocity out 
 % plot the input out
@@ -224,7 +227,7 @@ plot_flag_index = [19 20 ];   % look at right leg torque
 % plot_flag_index = [15 16];    % look at spring length and speed
 % plot_flag_index = [8];        % x velocity
 % plot_flag_index = [1 8];      % x
-plot_flag_index = [21 22];    % gound reaction force
+% plot_flag_index = [21 22];    % gound reaction force
 % plot_flag_index = [25 26];    % Foot position
 % plot_flag_index = [2];        % y
 
@@ -236,7 +239,8 @@ end
 
 
 %% Animation
-videoFileName = 'CLF-QP.avi';
+videoTitle = 'CLF-QP';
+videoFileName = [videoTitle,'.avi'];
 if F_ANIMATE
-    Animation(T,S,T(end),F_SAVEVID,videoFileName);    
+    Animation(T,S,T(end),F_SAVEVID,videoFileName,videoTitle);    
 end
