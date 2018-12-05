@@ -1,0 +1,1 @@
+Decrease the foot clearance. The previous traj has too much clearance.

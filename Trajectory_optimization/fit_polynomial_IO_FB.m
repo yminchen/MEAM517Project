@@ -2,6 +2,7 @@ clear;
 close all
 % load('Nomial_trajectories/Traj2/Data1Step_30-Nov-2018_100nodes.mat');  
 load('Nomial_trajectories/Traj3/Data1Step_04-Dec-2018.mat');  
+% load('Nomial_trajectories/Traj4/Data1Step_04-Dec-2018_lessFootClearance.mat');  
 
 addpath('../Functions/');   % for approx_leg_angle()
 
@@ -14,6 +15,7 @@ colheaders = {'x', 'y', 'phi', 'alphaR', 'betaR', 'alphaL', 'betaL'};
 %% Parameters
 chosenColumnList = [4,5,6,7]; % Choose the column of data you want to fit.
 polyOrder = 12;               % Set the order of the Polynomial
+isCheckFitting = false;       % Whether plot the fitting polynomial or not
 
 %% Pick the monotonically increasing function theta
 % You can choose time or the leg angle as the function (or x position, etc)
@@ -67,7 +69,6 @@ for chosenColumnListID = 1:lenChosenColumnList  % loop through every column chos
     coeff_all = [coeff_all; coeff'];
     
     %% Check how good the fitting is
-    isCheckFitting = true;
     if isCheckFitting
         %% Create function 
         syms z real
@@ -80,7 +81,7 @@ for chosenColumnListID = 1:lenChosenColumnList  % loop through every column chos
         disp(LSCurve);
 
         % simplify the polynomial coefficient
-        isSimplifyCoefficient = false;
+        isSimplifyCoefficient = true;
         if isSimplifyCoefficient
             coeff_z = sym2poly(LSCurve);
             coeff_z = coeff_z(end:-1:1);
