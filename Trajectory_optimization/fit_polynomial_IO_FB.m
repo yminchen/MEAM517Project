@@ -15,7 +15,8 @@ colheaders = {'x', 'y', 'phi', 'alphaR', 'betaR', 'alphaL', 'betaL'};
 %% Parameters
 chosenColumnList = [4,5,6,7]; % Choose the column of data you want to fit.
 polyOrder = 12;               % Set the order of the Polynomial
-isCheckFitting = false;       % Whether plot the fitting polynomial or not
+isCheckFitting = true;       % Whether plot the fitting polynomial or not
+isIOFeedbackLinearization = false;
 
 %% Pick the monotonically increasing function theta
 % You can choose time or the leg angle as the function (or x position, etc)
@@ -24,25 +25,27 @@ isCheckFitting = false;       % Whether plot the fitting polynomial or not
 theta = approx_leg_angle(q_data(:,3), q_data(:,4), q_data(:,5)); % approximated leg angle
 
 %% Symbolically compute input output feedback linearization 
-% Declare symbolic variables and calculate EoM
-addpath('../Function_generator/EOM_minimal_coord');
-disp('Creating EoM...')
-declare_syms_and_calc_EoM_minCoord;
-disp('Finished EoM.')
-B=zeros(7,4); B(4:7,:)=eye(4);
-% The equations of motion given by these functions are:   
-%   M * ddq = fCG + B*u;
-% Note that it has to be minimal coordinates. (no constraint forces in the EoM)
-% Otherwise, you cannot get u by IO FB linearization (at least I don't know how)
+if isIOFeedbackLinearization
+    % Declare symbolic variables and calculate EoM
+    addpath('../Function_generator/EOM_minimal_coord');
+    disp('Creating EoM...')
+    declare_syms_and_calc_EoM_minCoord;
+    disp('Finished EoM.')
+    B=zeros(7,4); B(4:7,:)=eye(4);
+    % The equations of motion given by these functions are:   
+    %   M * ddq = fCG + B*u;
+    % Note that it has to be minimal coordinates. (no constraint forces in the EoM)
+    % Otherwise, you cannot get u by IO FB linearization (at least I don't know how)
 
-% theta
-theta_of_q = approx_leg_angle(phi, alphaStance, betaStance);
+    % theta
+    theta_of_q = approx_leg_angle(phi, alphaStance, betaStance);
 
-% output y = y_first_term - h_d
-y_first_term = [ alphaStance;
-                 betaStance;
-                 alphaSwing;
-                 betaSwing];
+    % output y = y_first_term - h_d
+    y_first_term = [ alphaStance;
+                     betaStance;
+                     alphaSwing;
+                     betaSwing];
+end
 
 %% Fit polynomials to the data
 
@@ -107,7 +110,7 @@ for chosenColumnListID = 1:lenChosenColumnList  % loop through every column chos
         %% Plot original data over the theta variable (un-normalized phase variable)
         figure;
         plot(theta,q_data(:,chosenColumn));
-        xlabel('theta');
+        xlabel('theta (rad)');
         ylabel(colheaders{chosenColumn});
         hold on
 
@@ -118,6 +121,9 @@ for chosenColumnListID = 1:lenChosenColumnList  % loop through every column chos
         end
 
         plot(theta(:,1),LSFuncData);
+        
+        legend('Optimization data','Polynomial')
+        title('Data fitting')
         hold off    
 
         %% Plot the fitting function over phase (from 0 to 1)
@@ -138,6 +144,9 @@ for chosenColumnListID = 1:lenChosenColumnList  % loop through every column chos
 end
 
 
+%% IO FB linearization 
+if isIOFeedbackLinearization
+    
 %% Symbolically compute input output feedback linearization 
 % 
 % % Choose which joint to be the output
@@ -256,7 +265,7 @@ else
     matlabFunction(d_yDot_ddq,'file',['Auto_generated/d_yDot_ddq_theta_',colheaders{chosenCoeffRow}],'vars',{[qm;dqm],theta,sysParam_minCoord});
 end
 
-
+end
 
 
 

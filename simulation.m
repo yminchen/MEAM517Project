@@ -1,5 +1,10 @@
 % TODO: 
 
+% You can tune the CLF-QP controller by looking at the output
+
+% Check if your theta saturation is working in the function. (feed into the function with 
+% theta and also without theta)
+
 % Now the transition from stance to flight is disabled. Turn this back on in the future
 
 % You can get a better trajectory. Currently the swing knee kind of over
@@ -36,7 +41,7 @@ F_SAVEVID = 0;          % Save generated animation
 relTol  = 1e-6;%1e-10;         % Relative tolerance: Relative tolerance for ode45 numerical integration
 absTol  = 1e-6;%1e-10;         % Absolute tolerance: Absolute tolerance for ode45 numerical integration 
 dt      = 0.01; %[s]    % Max time step: Maximum time step for numerica integration 
-tFinal  = 2.5;    %[s]    % Simulation end time
+tFinal  = 3;    %[s]    % Simulation end time
 
 %% Yu-ming's parameters
 param = yumingParameters();
@@ -209,6 +214,7 @@ end
 time_to_run_simulation = toc
 
 %% Plot 
+plotTitle = 'CLF-QP with Torque Saturation';
 
 % Ref: P = [S, L_R, dL_R, E, E_des, tau_R, F_c,  Theta_R, dTheta_R, FootPos_R, tau_L]
 %           14 15   16    17 18     19/20  21/22 23       24        25/26      27/28
@@ -238,7 +244,7 @@ end
 
     
 %% Animation
-videoTitle = 'CLF-QP';
+videoTitle = plotTitle;
 videoFileName = [videoTitle,'.avi'];
 if F_ANIMATE
     Animation(T,S,T(end),F_SAVEVID,videoFileName,videoTitle);    

@@ -40,17 +40,21 @@ if isPlotOutputY
         y = [y;y_temp'];
     end
     figure
-    min_height = min(min(y));
-    max_height = max(max(y));
+    min_height = min(min(y))*1.2;
+    max_height = max(max(y))*1.2;
+    axis([T(1) T(end) min_height max_height]);
     plotPhaseZone_singleStanceWalk;
     
     hold on;
     plot(T,y) 
+    xlabel('Time (s)')
+    ylabel('Output (rad)')
+%     legend('Right Hip Error', 'Right Knee Error', 'Left Hip Error', 'Left Knee Error')
 end
 
 %% Plot leg angle
 isPlotLegAngle = 0;
-if isPlotLegAngle 
+if 1 
     theta_min = param.theta_min;
     theta_max = param.theta_max;
     
@@ -58,6 +62,7 @@ if isPlotLegAngle
     thetaR = approx_leg_angle(S(:,3)',S(:,4)',S(:,5)');
     min_height = min(thetaR);
     max_height = max(thetaR);
+    axis([T(1) T(end) min_height max_height]);
     plotPhaseZone_singleStanceWalk;
     
     hold on;
@@ -65,6 +70,7 @@ if isPlotLegAngle
     plot([T(1), T(end)],[theta_min, theta_min],'r')
     plot([T(1), T(end)],[theta_max, theta_max],'r')
     title('Right leg angle')
+    xlabel('Time (s)')
     
     
     figure; 
@@ -72,6 +78,7 @@ if isPlotLegAngle
     
     min_height = min(thetaL);
     max_height = max(thetaL);
+    axis([T(1) T(end) min_height max_height]);
     plotPhaseZone_singleStanceWalk;
     
     hold on;
@@ -248,7 +255,7 @@ plot([T(1) T(end)], [0 0], 'k--' ,'LineWidth',1)
 hold off
 
 % figure name
-title('Two-leg Hopper')
+title(plotTitle)
 xlabel('Time (s)')
 
 %% second plot (trajectory)
