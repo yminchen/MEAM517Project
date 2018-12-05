@@ -233,6 +233,7 @@ d_yDot_dtheta_times_dthetadt = jacobian(yDot,theta)*jacobian(theta_of_q,qm)*dqm;
 d_yDot_ddq = jacobian(yDot,dqm);
 
 IO_FB_term1 = d_yDot_dq_times_dqdt + d_yDot_dtheta_times_dthetadt;
+IO_FB_term1 = simplify(IO_FB_term1);
 
 if ~exist('Auto_generated','dir')
     mkdir('Auto_generated');

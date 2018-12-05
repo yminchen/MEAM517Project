@@ -2,6 +2,9 @@
 
 % Now the transition from stance to flight is disabled. Turn this back on in the future
 
+% You can get a better trajectory. Currently the swing knee kind of over
+% extend right before touchdown.
+
 % You can:
 % plot the knee joint velocity out 
 % plot the input out
