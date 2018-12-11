@@ -225,7 +225,8 @@ end
 time_to_run_simulation = toc
 
 %% Plot 
-plotTitle = 'robust CLF-QP with Torque Saturation';
+% plotTitle = 'robust CLF-QP with Torque Saturation';
+plotTitle = 'CLF-QP';
 
 % Ref: P = [S, L_R, dL_R, E, E_des, tau_R, F_c,  Theta_R, dTheta_R, FootPos_R, tau_L]
 %           14 15   16    17 18     19/20  21/22 23       24        25/26      27/28
@@ -258,5 +259,5 @@ end
 videoTitle = plotTitle;
 videoFileName = [videoTitle,'.avi'];
 if F_ANIMATE
-    Animation(T,S,T(end),1,videoFileName,videoTitle);    
+    Animation(T,S,T(end),false,videoFileName,videoTitle);    
 end

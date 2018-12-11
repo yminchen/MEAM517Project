@@ -13,7 +13,7 @@ function [mu] = CLF_QP(eta, Lg_Lf_y, u_star, torque_max, isTorqueSaturation, isR
     %% Choose the CLF    
     % Paramters
     epsilon = 0.01;%0.01 
-    c3 = 1000; %0.001
+    c3 = 100; %0.001
                     % Tuning experience:
                     % Smaller epsilon make the output converge faster
                     % bigger c3 make the output converge faster
@@ -21,7 +21,7 @@ function [mu] = CLF_QP(eta, Lg_Lf_y, u_star, torque_max, isTorqueSaturation, isR
                     % paper.
                     % Also, seems that Kp and Kd are not that important
     Kp = 10*eye(n_u); %10  % P gain for PD control (used to chose CLF)
-    Kd = 5*eye(n_u);  %2   % D gain for PD control (used to chose CLF)
+    Kd = 6*eye(n_u);  %2   % D gain for PD control (used to chose CLF)
     Q = eye(2*n_u);
 
     % Solve for Lyapunov equation

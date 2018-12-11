@@ -39,7 +39,7 @@ n_u = 4;
 param.n_u = n_u;
 
 % Joint torque constraint
-param.tau_max = 25;       %[Nm]         Maximum rotor torque
+param.tau_max = 10;%25;       %[Nm]         Maximum rotor torque
 param.torque_limit_flag = 1;            % 1 = enable motor torque limit
 
 %% controller parameters

@@ -61,6 +61,8 @@ if isPlotOutputY
     ylabel('Output (rad)')
     title(name{select_joint});
 %     legend('Right Hip Error', 'Right Knee Error', 'Left Hip Error', 'Left Knee Error')
+
+    set(gcf, 'Position', [100,100,400,300])
 end
 
 %% Plot leg angle

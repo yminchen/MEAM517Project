@@ -13,7 +13,8 @@ torque_max = param.tau_max; % motor torque max
 
 isModelPerturbation = true; % Whether there is modeling error 
 if isModelPerturbation 
-    scale = 1;
+    scale = 1; % TODO: something is wronge. I chagned this to 100, 
+                 % and the controller is still stabilizing
     sysParam_minCoord = sysParam_minCoord_pertrubed(scale,param.sysParam_minCoord);
 else
     sysParam_minCoord = param.sysParam_minCoord;
@@ -82,7 +83,7 @@ L_g_L_f_y =             d_yDot_ddq * (M\B  );
 u_star = - L_g_L_f_y\L_f_2_y;
 
 %% Feedback control on output
-control_option = 2; % 0: no feedback
+control_option = 3; % 0: no feedback
                     % 1: PD feedback control
                     % 2: CLF_QP
                     % 3: CLF_QP with torque saturation

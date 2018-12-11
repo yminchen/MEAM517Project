@@ -28,7 +28,7 @@ function [dqplus,nextPhase] = doubleStanceImpactUpdate(x,phase)
 %             disp(velFootR(2));
         else
             disp('Left Foot Touch Down. Enter double stance');
-            nextPhase = 5; % TODO: the correct value is 8
+            nextPhase = 8; % TODO: the correct value is 8
             dqplus = (eye(n/2) - (M\J')*pinv(J*(M\J'))*J)*x(n/2+1:n);
         end 
     elseif (phase == 5 || phase == 6)
@@ -44,7 +44,7 @@ function [dqplus,nextPhase] = doubleStanceImpactUpdate(x,phase)
 %             disp(velFootL(2));
         else
             disp('Right Foot Touch Down. Enter double stance');
-            nextPhase = 2; % TODO: the correct value is 7
+            nextPhase = 7; % TODO: the correct value is 7
             dqplus = (eye(n/2) - (M\J')*pinv(J*(M\J'))*J)*x(n/2+1:n);
         end
     elseif (phase == 1 || phase == 4)   
