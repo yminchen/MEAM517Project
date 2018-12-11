@@ -3,6 +3,13 @@
 isPlotOutputY = true;
 
 if isPlotOutputY
+    
+    select_joint = 1; %1 2 3 4 is RH RK LH LK in order
+    name = {'Output (Right Hip Tracking Error)',...
+            'Output (Right Knee Tracking Error)',...
+            'Output (Left Hip Tracking Error)',...
+            'Output (Left Knee Tracking Error)'};
+    
     sysParam_minCoord = param.sysParam_minCoord;
     y = [];
     for i = 1:numel(DS)
@@ -39,6 +46,9 @@ if isPlotOutputY
         y_temp = y_output_theta_vector(xm,theta,sysParam_minCoord);
         y = [y;y_temp'];
     end
+    
+    y = y(:,select_joint);
+    
     figure
     min_height = min(min(y))*1.2;
     max_height = max(max(y))*1.2;
@@ -46,9 +56,10 @@ if isPlotOutputY
     plotPhaseZone_singleStanceWalk;
     
     hold on;
-    plot(T,y) 
+    plot(T,y,'b') 
     xlabel('Time (s)')
     ylabel('Output (rad)')
+    title(name{select_joint});
 %     legend('Right Hip Error', 'Right Knee Error', 'Left Hip Error', 'Left Knee Error')
 end
 
@@ -270,6 +281,6 @@ plot(Total_CoG(:,1),Total_CoG(:,2),'b'); % CoG of total mass
 % plot(P(:,1),P(:,2),'b'); % CoG of main body
 
 axis equal;
-title('Trayjectory of Two-leg Hopper');
+title('Trayjectory of Five-link Robot');
 xlabel(' (m)');
 ylabel(' (m)');

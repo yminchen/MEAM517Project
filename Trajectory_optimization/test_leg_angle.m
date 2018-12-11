@@ -44,3 +44,7 @@ end
 hold on; plot(t, theta_approx)
 legend('Leg angle (ground truth)', 'Approximated leg angle')
 
+%% Initial swing foot vertical velocity
+FootTemp = velFootL([x1(1,:).';xdot1(1,:).'], p_vec)
+
+

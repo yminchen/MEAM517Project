@@ -32,7 +32,7 @@ axis equal;
 % boarder of the world
 boarderR = max(X(:,1))+1;
 boarderL = min(X(:,1))-0.5;
-boarderT = max(X(:,2))+0.5;
+boarderT = max(X(:,2))+0.2;
 axis([boarderL boarderR -0.2 boarderT])
 % axis([boarderL 2 -0.1 2])
 

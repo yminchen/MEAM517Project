@@ -1,22 +1,20 @@
 % TODO: 
 
-% You can tune the CLF-QP controller by looking at the output
+% I guess the most important thing is to test performace of different
+% controller. 
+
+% You can tune the CLF-QP controller by looking at the output (You only need one foot step to tune)
 
 % Check if your theta saturation is working in the function. (feed into the function with 
 % theta and also without theta)
+
+% You can try different output to see if the performance is better. 
+% E.g. Torso pitch angle. Absolute swing hip angle or swing leg angle.  
 
 % Now the transition from stance to flight is disabled. Turn this back on in the future
 
 % You can get a better trajectory. Currently the swing knee kind of over
 % extend right before touchdown.
-
-% You can test whether the torque saturation is working or not by setting
-% torque limit in the QP to be a lower value.
-
-% You can:
-% plot the knee joint velocity out 
-% plot the input out
-% plot the contact force out
 
 % Change quadprog to SNOPT. See if the speed can be improved significantly.
 
@@ -24,6 +22,19 @@
 
 % For robust CLF-QP, you can calculate whether the delta_H and delta_G exceed the bound.
 % Test if the controller fail when delta_G and delta_H is out of the predifined maximum bound. 
+
+% Notes:
+% Not sure where the output error right after touchdown comes from. (e.g. use PD control)
+% It's not from simulation accuracy.
+
+% You can:
+% plot the knee joint velocity out 
+% plot the input out
+% plot the contact force out
+
+% You can test whether the torque saturation is working or not by setting
+% torque limit in the QP to be a lower value.
+% Ans: yes.
 
 %% Some minor housekeeping 
 clear; clc; clf; close all;
@@ -41,7 +52,7 @@ F_SAVEVID = 0;          % Save generated animation
 relTol  = 1e-6;%1e-10;         % Relative tolerance: Relative tolerance for ode45 numerical integration
 absTol  = 1e-6;%1e-10;         % Absolute tolerance: Absolute tolerance for ode45 numerical integration 
 dt      = 0.01; %[s]    % Max time step: Maximum time step for numerica integration 
-tFinal  = 3;    %[s]    % Simulation end time
+tFinal  = 0.85;    %[s]    % Simulation end time
 
 %% Yu-ming's parameters
 param = yumingParameters();
@@ -214,7 +225,7 @@ end
 time_to_run_simulation = toc
 
 %% Plot 
-plotTitle = 'CLF-QP with Torque Saturation';
+plotTitle = 'robust CLF-QP with Torque Saturation';
 
 % Ref: P = [S, L_R, dL_R, E, E_des, tau_R, F_c,  Theta_R, dTheta_R, FootPos_R, tau_L]
 %           14 15   16    17 18     19/20  21/22 23       24        25/26      27/28
@@ -247,5 +258,5 @@ end
 videoTitle = plotTitle;
 videoFileName = [videoTitle,'.avi'];
 if F_ANIMATE
-    Animation(T,S,T(end),F_SAVEVID,videoFileName,videoTitle);    
+    Animation(T,S,T(end),1,videoFileName,videoTitle);    
 end

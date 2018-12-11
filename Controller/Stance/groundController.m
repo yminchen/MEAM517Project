@@ -82,7 +82,7 @@ L_g_L_f_y =             d_yDot_ddq * (M\B  );
 u_star = - L_g_L_f_y\L_f_2_y;
 
 %% Feedback control on output
-control_option = 4; % 0: no feedback
+control_option = 2; % 0: no feedback
                     % 1: PD feedback control
                     % 2: CLF_QP
                     % 3: CLF_QP with torque saturation

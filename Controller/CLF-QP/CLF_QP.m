@@ -12,13 +12,16 @@ function [mu] = CLF_QP(eta, Lg_Lf_y, u_star, torque_max, isTorqueSaturation, isR
     
     %% Choose the CLF    
     % Paramters
-    epsilon = 0.01; % seems that smaller epsilon make the controller stable?
-                    % at least 0.01 is better than 0.1 
-    c3 = 0.001; % Need to tune this! 
-                % (I think for small enough number, there exsits a solution for the QP)
-    
-    Kp = 10*eye(n_u);   % P gain for PD control (used to chose CLF)
-    Kd = 2*eye(n_u);    % D gain for PD control (used to chose CLF)
+    epsilon = 0.01;%0.01 
+    c3 = 1000; %0.001
+                    % Tuning experience:
+                    % Smaller epsilon make the output converge faster
+                    % bigger c3 make the output converge faster
+                    % You can actually tell from equation 21 of the CLF-QP
+                    % paper.
+                    % Also, seems that Kp and Kd are not that important
+    Kp = 10*eye(n_u); %10  % P gain for PD control (used to chose CLF)
+    Kd = 5*eye(n_u);  %2   % D gain for PD control (used to chose CLF)
     Q = eye(2*n_u);
 
     % Solve for Lyapunov equation
